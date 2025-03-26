@@ -42,8 +42,22 @@ class GemmaLISATrainer(Trainer):
         self.use_amp = self.args.fp16 or self.args.bf16
         logger.info(f"混合精度トレーニング(AMP): {'有効' if self.use_amp else '無効'}")
         
+        # PyTorchバージョン情報のログ
+        logger.info(f"PyTorchバージョン: {torch.__version__}")
+        
         # 混合精度トレーニング用のスケーラーを初期化
-        self.scaler = torch.amp.GradScaler('cuda') if torch.cuda.is_available() and self.use_amp else None
+        try:
+            self.scaler = torch.cuda.amp.GradScaler() if torch.cuda.is_available() and self.use_amp else None
+            logger.info("GradScaler: torch.cuda.amp.GradScalerを使用")
+        except AttributeError:
+            logger.warning("torch.cuda.ampにGradScalerが見つかりません。代替パスを試みます...")
+            try:
+                self.scaler = torch.amp.GradScaler() if torch.cuda.is_available() and self.use_amp else None
+                logger.info("GradScaler: torch.amp.GradScalerを使用")
+            except AttributeError:
+                logger.error("GradScalerが見つかりません。混合精度トレーニングは無効化されます。")
+                self.scaler = None
+                self.use_amp = False
         
         # GPUデバイス情報のログ
         if torch.cuda.is_available():
@@ -637,7 +651,7 @@ class GemmaLISATrainer(Trainer):
             outputs = None
         
         # MixedPrecisionで学習している場合
-        if self.use_amp:
+        if self.use_amp and self.scaler is not None:
             # テンソルチェック
             if not isinstance(loss, torch.Tensor):
                 logger.warning(f"backward前の損失が非テンソル型です（{type(loss)}）。テンソルに変換します。")
@@ -678,15 +692,17 @@ class GemmaLISATrainer(Trainer):
                 loss.requires_grad = True
                 
             logger.info(f"バックワード前の損失: {loss.item()}, requires_grad={loss.requires_grad}")
+            
+            # GradScalerを使用した勾配計算
             self.scaler.scale(loss).backward()
             
             # 勾配クリッピング（CUDAが利用可能な場合のみ）
-            if self.args.max_grad_norm is not None and self.args.max_grad_norm > 0:
-                # CUDAが利用可能な場合のみunscaleとclip_grad_normを実行
-                if torch.cuda.is_available():
-                    self.scaler.unscale_(self.optimizer)
-                    self.accelerator.clip_grad_norm_(model.parameters(), self.args.max_grad_norm)
-                
+            if self.args.max_grad_norm is not None and self.args.max_grad_norm > 0 and torch.cuda.is_available():
+                # クリッピング前にスケールを戻す
+                self.scaler.unscale_(self.optimizer)
+                self.accelerator.clip_grad_norm_(model.parameters(), self.args.max_grad_norm)
+            
+            # オプティマイザステップとスケーラー更新
             self.scaler.step(self.optimizer)
             self.scaler.update()
         else:

@@ -858,8 +858,12 @@ def main(args):
         
         # TrainingArgumentsの設定
         deepspeed_config = None
-        if DEEPSPEED_AVAILABLE and os.path.exists(args.deepspeed_config) and args.deepspeed_config != "None":
+        # DeepSpeedの使用を無効化（明示的に無効化）
+        if False and DEEPSPEED_AVAILABLE and os.path.exists(args.deepspeed_config) and args.deepspeed_config != "None":
             deepspeed_config = args.deepspeed_config
+            logger.info(f"DeepSpeed設定が読み込まれました: {deepspeed_config}")
+        else:
+            logger.info("DeepSpeedは無効化されています")
     
         training_args = TrainingArguments(
             output_dir=args.log_dir,
