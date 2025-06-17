@@ -31,7 +31,7 @@ def parse_args():
     
     parser.add_argument('--precision', type=str, default='fp32', help='精度 (fp32, fp16, bf16)')
     
-    parser.add_argument('--dataset_dir', type=str, default='H:/download/LISA-dataset/dataset',
+    parser.add_argument('--dataset_dir', type=str, default='/mnt/h/download/LISA-dataset/dataset',
                         help='データセットディレクトリ')
     
     parser.add_argument('--dataset_type', type=str, default='vqa',

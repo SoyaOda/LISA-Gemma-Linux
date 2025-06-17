@@ -118,7 +118,7 @@ def parse_args(args):
     parser.add_argument("--vqa_data", default="llava_instruct_150k", type=str)
     parser.add_argument("--reason_seg_data", default="reason_seg/ReasonSeg", type=str)
     parser.add_argument("--val_dataset", default="ReasonSeg|val", type=str)
-    parser.add_argument("--dataset_dir", default="H:\\download\\LISA-dataset\\dataset", type=str)
+    parser.add_argument("--dataset_dir", default="/mnt/h/download/LISA-dataset/dataset", type=str)
     parser.add_argument("--log_base_dir", default="./runs", type=str)
     parser.add_argument("--exp_name", default="lisa-gemma3-full", type=str)
     # フルデータセット用にエポック数を調整
@@ -150,7 +150,7 @@ def parse_args(args):
     parser.add_argument("--exclude_val", action="store_true", default=False)
     parser.add_argument("--no_eval", action="store_true", default=False)
     parser.add_argument("--eval_only", action="store_true", default=False)
-    parser.add_argument("--vision_pretrained", default="C:/Users/oda/foodlmm-llama/weights/sam_vit_h_4b8939.pth", type=str)
+    parser.add_argument("--vision_pretrained", default="/mnt/c/Users/oda/foodlmm-llama/weights/sam_vit_h_4b8939.pth", type=str)
     parser.add_argument("--out_dim", default=256, type=int)
     parser.add_argument("--resume", default="", type=str)
     parser.add_argument("--print_freq", default=1, type=int)

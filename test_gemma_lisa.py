@@ -39,7 +39,7 @@ def parse_args():
     parser.add_argument(
         "--vision_pretrained",
         type=str,
-        default="C:/Users/oda/foodlmm-llama/weights/sam_vit_h_4b8939.pth",
+        default="/mnt/c/Users/oda/foodlmm-llama/weights/sam_vit_h_4b8939.pth",
         help="SAMの事前学習重み",
     )
     parser.add_argument(

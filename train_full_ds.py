@@ -150,7 +150,7 @@ def parse_args(args):
     parser.add_argument("--exclude_val", action="store_true", default=False)
     parser.add_argument("--no_eval", action="store_true", default=False)
     parser.add_argument("--eval_only", action="store_true", default=False)
-    parser.add_argument("--vision_pretrained", default="C:/Users/oda/foodlmm-llama/weights/sam_vit_h_4b8939.pth", type=str)
+    parser.add_argument("--vision_pretrained", default="/mnt/c/Users/oda/foodlmm-llama/weights/sam_vit_h_4b8939.pth", type=str)
     parser.add_argument("--out_dim", default=256, type=int)
     parser.add_argument("--resume", default="", type=str)
     parser.add_argument("--print_freq", default=1, type=int)

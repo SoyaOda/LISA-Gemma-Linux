@@ -157,7 +157,7 @@ def parse_args():
     parser.add_argument("--vision_tower", type=str, default="sigLIP", help="ビジョンエンコーダ（CLIP or sigLIP）")
     
     # データセット設定
-    parser.add_argument("--dataset_dir", type=str, default="H:/download/LISA-dataset/dataset", help="データセットディレクトリ")
+    parser.add_argument("--dataset_dir", type=str, default="/mnt/h/download/LISA-dataset/dataset", help="データセットディレクトリ")
     
     # データセットタイプの選択
     dataset_group = parser.add_argument_group('データセットタイプの選択')
@@ -237,14 +237,14 @@ def create_dataset_specific_args(dataset_type, dataset):
         args.extend(["--refer_seg_data", dataset])
     elif dataset_type == "vqa":
         args.extend(["--vqa_data", dataset])
-        # llava_instruct_150kの場合、llava_datasetディレクトリを指定
-        args.extend(["--llava_dataset_dir", "llava_dataset"])
+        # llava_instruct_150kの場合、vqa_base_dirディレクトリを指定
+        args.extend(["--vqa_base_dir", "llava_dataset"])
     elif dataset_type == "reason_seg":
         # ReasonSegの場合、正しいパスを指定
         # reason_seg/ReasonSeg/trainディレクトリにデータがあるので、そのパスを設定
         args.extend(["--reason_seg_data", f"{dataset}|train"])
         # ReasonSegのデータディレクトリを追加指定
-        args.extend(["--reason_seg_dir", "reason_seg"])
+        args.extend(["--reason_seg_base_dir", "reason_seg"])
     
     return args
 

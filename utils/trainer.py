@@ -633,6 +633,10 @@ class GemmaLISATrainer(Trainer):
         if 'images' in inputs and inputs['images'] is not None:
             # 画像入力があることを確認
             images = inputs['images']
+            # 画像テンソルを浮動小数点型に変換（必要な場合）
+            if images.dtype in [torch.uint8, torch.int8, torch.int16, torch.int32, torch.int64]:
+                images = images.float()
+                inputs['images'] = images
             if not images.requires_grad:
                 images.requires_grad = True
             

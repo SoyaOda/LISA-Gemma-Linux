@@ -203,7 +203,7 @@ def test_dataloader(dataset, num_samples=5):
 
 def main():
     parser = argparse.ArgumentParser(description="refer_segデータセットテスト")
-    parser.add_argument("--dataset_dir", type=str, default="H:/download/LISA-dataset/dataset",
+    parser.add_argument("--dataset_dir", type=str, default="/mnt/h/download/LISA-dataset/dataset",
                         help="データセットのベースディレクトリ")
     parser.add_argument("--model_name", type=str, default="google/gemma-7b-it",
                         help="使用するモデル名")

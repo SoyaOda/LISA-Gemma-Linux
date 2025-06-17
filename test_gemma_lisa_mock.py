@@ -33,7 +33,7 @@ def parse_args():
                         help='テスト用画像パス')
     
     parser.add_argument('--sam_checkpoint', type=str, 
-                        default='C:/Users/oda/foodlmm-llama/weights/sam_vit_h_4b8939.pth',
+                        default='/mnt/c/Users/oda/foodlmm-llama/weights/sam_vit_h_4b8939.pth',
                         help='SAMモデルのチェックポイントパス')
     
     parser.add_argument('--output_dir', type=str, default='output',
